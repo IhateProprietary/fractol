@@ -1,0 +1,11 @@
+fractol
+a.out
+*.dSYM
+*.o
+*.exe
+*.a
+*~
+*#*#*
+*.#*
+*debug*
+*test*
