@@ -6,14 +6,19 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:41:19 by jye               #+#    #+#             */
-/*   Updated: 2018/01/05 04:47:10 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/06 09:58:09 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FRACTOL_H
 # define FRACTOL_H
 
+# ifdef __APPLE__
+#  include <OpenCL/OpenCL.h>
+# endif
+
 # include <stdlib.h>
+# include <stddef.h>
 # if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 #  include "fucknorm1.h"
 # else
@@ -23,6 +28,7 @@
 # define IMAGEHEIGHT 	1080
 # define IMAGEWIDTH		1900
 # define PROGRAM_NAME	"fractol"
+# define THREAD_MAX 	18
 
 typedef union	u_mlxcolor
 {
@@ -38,8 +44,10 @@ typedef struct	s_complex
 
 typedef struct	s_fract
 {
-	double			x_re;
-	double			y_im;
+	cl_double		x_re;
+	cl_double		y_im;
+	cl_uint			iteration;
+	cl_uint			csetsize;
 	double			min_re;
 	double			max_re;
 	double			min_im;
@@ -47,9 +55,20 @@ typedef struct	s_fract
 	double			zoom;
 	double			movex;
 	double			movey;
-	int				(*fract_)(const struct s_fract *, double, double);
-	int				iteration;
+	char			*frac;
 }				t_fract;
+
+typedef struct	s_cl
+{
+	cl_device_id		dev_id;
+	cl_platform_id		pla_id;
+	cl_context			context;
+	cl_command_queue	queue;
+	cl_program			program;
+	cl_kernel			kernel;
+	cl_mem				img__;
+	cl_mem				cset;
+}				t_cl;
 
 typedef struct	s_mlx
 {
@@ -57,8 +76,8 @@ typedef struct	s_mlx
 	void	*win;
 	void	*img;
 	void	*img__;
-	size_t	imageh;
-	size_t	imagew;
+	cl_int	img_size;
+	t_cl	cl;
 }				t_mlx;
 
 /*
@@ -74,7 +93,7 @@ void			put_pixel(void *img_ptr, int x, int y, int color);
 */
 
 void			draw_nfract(const t_mlx *m, const t_fract *f,
-							unsigned int y, unsigned int n);
+							unsigned int n[2]);
 int				julia_(const t_fract *f, double r, double i);
 int				mandelbrot_(const t_fract *f, double r, double i);
 

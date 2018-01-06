@@ -6,45 +6,40 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/03 00:45:00 by jye               #+#    #+#             */
-/*   Updated: 2018/01/05 02:02:35 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/06 10:09:37 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
+#include <stddef.h>
 
-void	set_fractal_pixel(const t_mlx *m, const t_fract *f,
-						  const t_complex *c, const unsigned int x[2])
+void	runcl_task(const t_mlx *m, cl_uint x, cl_double c[2])
 {
-	int		n;
+	size_t	workdim;
 
-	n = f->fract_(f, c->re, c->im);
-	put_pixel(m->img__, x[0], x[1],
-		((t_mlxcolor){
-			.color.r = (n * 2) % 256,
-			.color.g = (n) % 256,
-			.color.b = (n) % 256
-		}).color__);
+	workdim = IMAGEWIDTH;
+	clSetKernelArg(m->cl.kernel, 1, sizeof(cl_double) * 2, c);
+	clSetKernelArg(m->cl.kernel, 2, sizeof(cl_uint) * 1, &x);
+	clEnqueueNDRangeKernel(m->cl.queue, m->cl.kernel, 1, 0, &workdim, 0, 0, NULL, 0);
 }
 
-void	draw_nfract(const t_mlx *m, const t_fract *f, unsigned int y, unsigned int n)
+void	draw_nfract(const t_mlx *m, const t_fract *f, unsigned int n[2])
 {
 	t_complex		fact;
 	t_complex		c;
-	unsigned int	x;
 
-	x = 0;
 	fact.re = (f->max_re - f->min_re) / (IMAGEWIDTH);
 	fact.im = (f->max_im - f->min_im) / (IMAGEHEIGHT);
-	while (y < n)
+	while (n[0] < n[1])
 	{
-		c.im = f->max_im - y * fact.im + f->movey;
-		while (x < IMAGEWIDTH)
-		{
-			c.re = f->min_re + x * fact.re + f->movex;
-			set_fractal_pixel(m, f, &c, (const unsigned int[2]){x, y});
-			++x;
-		}
-		x = 0;
-		++y;
+		/* c.im = f->max_im - n[0] * fact.im + f->movey; */
+		/* while (x < IMAGEWIDTH) */
+		/* { */
+		/* c.re = f->min_re + x * fact.re + f->movex; */
+		runcl_task(m, n[0], (cl_double[2]){fact.re, fact.im});
+		/* 	++x; */
+		/* /\* } *\/ */
+		/* x = 0; */
+		++n[0];
 	}
 }

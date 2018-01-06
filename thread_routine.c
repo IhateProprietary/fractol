@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 04:20:22 by jye               #+#    #+#             */
-/*   Updated: 2018/01/05 04:47:45 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/06 09:58:01 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,18 @@
 #include <pthread.h>
 #include <stddef.h>
 
-#define THREAD_MAX 18
-
 static void	*draw_routine(void *param)
 {
 	static unsigned int	frac = IMAGEHEIGHT / THREAD_MAX;
-	static uint64_t		tid;
+	static uint64_t		unsafe_tid__;
 	unsigned int		y;
 	unsigned int		n;
 
-	y = (tid++ % THREAD_MAX) * frac;
+	y = (unsafe_tid__++ % THREAD_MAX) * frac;
 	n = y + frac;
 	draw_nfract((t_mlx *)*((void **)(param)),
 				(t_fract *)*((void **)(param + sizeof(void *))),
-				y, n);
+				(unsigned int[2]){y, n});
 	pthread_exit(NULL);
 	return (0);
 }

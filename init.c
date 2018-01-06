@@ -6,12 +6,14 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 03:13:18 by jye               #+#    #+#             */
-/*   Updated: 2018/01/03 01:38:56 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/06 04:35:15 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 #include "mlx.h"
+
+#include <stddef.h>
 
 int		init_mlx_win(t_mlx *mlx)
 {
@@ -35,6 +37,6 @@ int		init_mlx_img(t_mlx *mlx)
 	{
 		return (1);
 	}
-	mlx->img__ = mlx_get_data_addr(mlx->img, &dummy, &dummy, &dummy);
+	mlx->img__ = mlx_get_data_addr(mlx->img, &dummy, &mlx->img_size, &dummy);
 	return (0);
 }

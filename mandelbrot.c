@@ -6,13 +6,13 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/03 01:10:27 by jye               #+#    #+#             */
-/*   Updated: 2018/01/05 02:01:52 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/06 04:12:40 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-int	mandelbrot_(const t_fract *f, double r, double i)
+int		mandelbrot_(const t_fract *f, double r, double i)
 {
 	unsigned int	n;
 	double			r2;

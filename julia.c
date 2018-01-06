@@ -6,13 +6,13 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 05:43:32 by jye               #+#    #+#             */
-/*   Updated: 2018/01/05 02:01:42 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/06 04:12:30 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-int	julia_(const t_fract *f, double r, double i)
+int		julia_(const t_fract *f, double r, double i)
 {
 	unsigned int	n;
 	double			r2;
