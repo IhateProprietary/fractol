@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:48:20 by jye               #+#    #+#             */
-/*   Updated: 2018/01/06 10:04:38 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/08 01:12:07 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,11 +124,17 @@ int		main(int ac, char **av)
 	init_opencl(&mlx);
 	init_color_set(&mlx, &f, cset);
 	init_opencl_kernel(&mlx, &f);
-	init_draw_routine(&mlx, &f);
-	dprintf(1, "%d\n", *(int *)mlx.img__);
+//	init_draw_routine(&mlx, &f);
+	draw_nfract(&mlx, &f, (unsigned int[2]){0, 1});
+//	dprintf(1, "%d\n", *(int *)mlx.img__);
 	clEnqueueReadBuffer(mlx.cl.queue, mlx.cl.img__, CL_TRUE, 0,
 						mlx.img_size * IMAGEHEIGHT, mlx.img__, 0, 0, 0);
-	dprintf(1, "%d\n", *(int *)mlx.img__);
+	dprintf(1, "-------------------------\n");
+	for (int i = 0; i < IMAGEWIDTH; i++)
+	{
+		dprintf(2, "%d\n", ((uint *)mlx.img__)[i]);
+	}
+//	dprintf(1, "%d\n", *(int *)mlx.img__);
 	mlx_put_image_to_window(mlx.ptr, mlx.win, mlx.img, 0, 0);
 	mlx_loop(mlx.ptr);
 }

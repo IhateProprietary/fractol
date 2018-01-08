@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/03 00:45:00 by jye               #+#    #+#             */
-/*   Updated: 2018/01/06 10:09:37 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/08 01:00:14 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,8 @@
 
 void	runcl_task(const t_mlx *m, cl_uint x, cl_double c[2])
 {
-	size_t	workdim;
+	const static size_t	workdim = IMAGEWIDTH;
 
-	workdim = IMAGEWIDTH;
 	clSetKernelArg(m->cl.kernel, 1, sizeof(cl_double) * 2, c);
 	clSetKernelArg(m->cl.kernel, 2, sizeof(cl_uint) * 1, &x);
 	clEnqueueNDRangeKernel(m->cl.queue, m->cl.kernel, 1, 0, &workdim, 0, 0, NULL, 0);

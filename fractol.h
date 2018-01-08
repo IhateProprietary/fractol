@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:41:19 by jye               #+#    #+#             */
-/*   Updated: 2018/01/06 09:58:09 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/08 00:46:58 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # endif
 
 # define IMAGEHEIGHT 	1080
-# define IMAGEWIDTH		1900
+# define IMAGEWIDTH		1920
 # define PROGRAM_NAME	"fractol"
 # define THREAD_MAX 	18
 

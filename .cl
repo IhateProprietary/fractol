@@ -32,16 +32,15 @@ __kernel void julia(fract_t f,
 					__constant __read_only uint *cset,
 					__global __write_only uint *img_ptr)
 {
-	uint		n;
 	complex_t	c;
 	double		r2;
 	double		i2;
+	uint		n;
 
-	n = 0;
 	g.x = get_global_id(0);
 	c.re = f.max_im - g.y * fact.im + f.movey;
 	c.im = f.min_re + g.x * fact.re + f.movex;
-	while (n < f.iteration)
+	for (n = 0; n < f.iteration; n++)
 	{
 		i2 = c.im * c.im;
 		r2 = c.re * c.re;
@@ -49,7 +48,7 @@ __kernel void julia(fract_t f,
 			break;
 		c.im = 2 * c.re * c.im + f.y_im;
 		c.re = r2 - i2 + f.x_re;
-		++n;
 	}
-	*(img_ptr + (g.x + g.y * 1920)) = n;
+	printf("%d %d %d\n", g.x, g.y, n * 200);
+	*(img_ptr + (g.x + g.y * 1920)) = n * 200;
 }
