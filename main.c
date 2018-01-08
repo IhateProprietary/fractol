@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:48:20 by jye               #+#    #+#             */
-/*   Updated: 2018/01/08 01:12:07 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/08 08:48:17 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@ cl_program	cl_get_program(t_cl *cl)
 
 	fd = open(".cl", O_RDONLY);
 	buf = malloc(4096);
-	read(fd, buf, 4096);
+	buf[read(fd, buf, 4096)] = 0;
 	program = clCreateProgramWithSource(cl->context, 1,	(const char **)&buf,
 										(size_t *)&zzz,
 										&ret);
 	clBuildProgram(program, 1, &cl->dev_id, 0, 0, 0);
 	clGetProgramBuildInfo(program, cl->dev_id, CL_PROGRAM_BUILD_LOG, zzz, buf, &zzz);
-	dprintf(1, "%s\n", buf);
+	dprintf(1, "error here----:\n%s", buf);
 	close(fd);
 	free(buf);
 	return (program);
@@ -54,14 +54,16 @@ int		init_opencl(t_mlx *m)
 	clGetDeviceIDs(m->cl.pla_id, CL_DEVICE_TYPE_GPU, 1, &m->cl.dev_id, NULL);
 	clpro[1] = (cl_context_properties)m->cl.pla_id;
 	m->cl.context = clCreateContext(clpro, 1, &m->cl.dev_id, NULL, NULL, &ret);
+	if (ret != CL_SUCCESS)
+		return (ret);
 	m->cl.queue = clCreateCommandQueue(m->cl.context, m->cl.dev_id, 0, &ret);
 	if (ret != CL_SUCCESS)
-		return (1);
+		return (ret);
 	m->cl.img__ = clCreateBuffer(m->cl.context,
 								 CL_MEM_WRITE_ONLY,
-								 m->img_size * IMAGEHEIGHT, 0, &ret);
+								 sizeof(int) * IMAGEWIDTH * IMAGEHEIGHT, 0, &ret);
 	if (ret != CL_SUCCESS)
-		return (1);
+		return (ret);
 	m->cl.program = cl_get_program(&m->cl);
 	return (0);
 }
@@ -77,64 +79,33 @@ int		init_opencl_kernel(t_mlx *m, t_fract *f)
 				   sizeof(cl_uint) * 2 +
 				   sizeof(cl_double) * 7,
 				   f);
-	clSetKernelArg(m->cl.kernel, 3, sizeof(cl_int), &m->img_size);
-	clSetKernelArg(m->cl.kernel, 5, sizeof(cl_mem), &m->cl.img__);
-	clSetKernelArg(m->cl.kernel, 4, sizeof(cl_mem), &m->cl.cset);
-	return (0);
-}
-
-int		init_color_set(t_mlx *m, t_fract *f, char *cset)
-{
-	static t_mlxcolor	set[] = {
-		{.color__ = 0},
-		{.color.b = 0xff}
-	};
-	int					ret;
-
-	if (cset == NULL)
-	{
-		m->cl.cset = clCreateBuffer(m->cl.context, CL_MEM_READ_ONLY,
-									sizeof(int) * 2, 0, &ret);
-		ret = clEnqueueReadBuffer(m->cl.queue, m->cl.cset, CL_TRUE, 0,
-								   sizeof(int) * 2, &set, 0, 0, 0);
-
-		f->csetsize = 2;
-	}
+	clSetKernelArg(m->cl.kernel, 3, sizeof(cl_mem), &m->cl.img__);
 	return (0);
 }
 
 int		main(int ac, char **av)
 {
 	t_mlx	mlx;
-	char	*cset;
+//	char	*cset;
 	t_fract	f;
 
 	if (init_mlx_win(&mlx) || init_mlx_img(&mlx))
 		return (1);
-	cset = 0;
 	f = (t_fract){
 		.x_re = -1.2,
 		.y_im = 0.160,
-		.min_re = -2.5, .max_re = 1, .min_im = -1.0,
+		.min_re = -2.5, .max_re = 1.0, .min_im = -1.0,
 		.max_im = 1.0,
-		.movex = 0.0, .movey = 0.0,
-		.frac = "julia",
+		.movex = 0.75, .movey = -0,
+		.frac = "multibrot",
 		.iteration = 1000
 	};
 	init_opencl(&mlx);
-	init_color_set(&mlx, &f, cset);
+//	init_color_set(&mlx, &f, cset);
 	init_opencl_kernel(&mlx, &f);
-//	init_draw_routine(&mlx, &f);
-	draw_nfract(&mlx, &f, (unsigned int[2]){0, 1});
-//	dprintf(1, "%d\n", *(int *)mlx.img__);
+	draw_nfract(&mlx, &f, 0, IMAGEHEIGHT);
 	clEnqueueReadBuffer(mlx.cl.queue, mlx.cl.img__, CL_TRUE, 0,
-						mlx.img_size * IMAGEHEIGHT, mlx.img__, 0, 0, 0);
-	dprintf(1, "-------------------------\n");
-	for (int i = 0; i < IMAGEWIDTH; i++)
-	{
-		dprintf(2, "%d\n", ((uint *)mlx.img__)[i]);
-	}
-//	dprintf(1, "%d\n", *(int *)mlx.img__);
+						sizeof(int) * IMAGEWIDTH * IMAGEHEIGHT, mlx.img__, 0, 0, 0);
 	mlx_put_image_to_window(mlx.ptr, mlx.win, mlx.img, 0, 0);
 	mlx_loop(mlx.ptr);
 }

@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:41:19 by jye               #+#    #+#             */
-/*   Updated: 2018/01/08 00:46:58 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/08 08:51:30 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@
 # define IMAGEHEIGHT 	1080
 # define IMAGEWIDTH		1920
 # define PROGRAM_NAME	"fractol"
-# define THREAD_MAX 	18
 
 typedef union	u_mlxcolor
 {
@@ -93,7 +92,7 @@ void			put_pixel(void *img_ptr, int x, int y, int color);
 */
 
 void			draw_nfract(const t_mlx *m, const t_fract *f,
-							unsigned int n[2]);
+							unsigned int y, unsigned int n);
 int				julia_(const t_fract *f, double r, double i);
 int				mandelbrot_(const t_fract *f, double r, double i);
 
