@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:41:19 by jye               #+#    #+#             */
-/*   Updated: 2018/01/08 08:51:30 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/09 02:33:44 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,19 @@ typedef struct	s_complex
 
 typedef struct	s_fract
 {
-	cl_double		x_re;
-	cl_double		y_im;
-	cl_uint			iteration;
-	cl_uint			csetsize;
-	double			min_re;
-	double			max_re;
-	double			min_im;
-	double			max_im;
-	double			zoom;
-	double			movex;
-	double			movey;
-	char			*frac;
+	cl_double	x_re;
+	cl_double	y_im;
+	cl_uint		iteration;
+	cl_uint		csetsize;
+	double		min_re;
+	double		max_re;
+	double		min_im;
+	double		max_im;
+	double		zoom;
+	double		movex;
+	double		movey;
+	char		*frac;
+	int			randomness;
 }				t_fract;
 
 typedef struct	s_cl

@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:48:20 by jye               #+#    #+#             */
-/*   Updated: 2018/01/08 08:48:17 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/09 02:34:06 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,8 @@ int		init_opencl_kernel(t_mlx *m, t_fract *f)
 	if ((m->cl.kernel = clCreateKernel(m->cl.program, f->frac, &ret)) == 0)
 		return (1);
 	clSetKernelArg(m->cl.kernel, 0,
-				   sizeof(cl_double) * 2 +
-				   sizeof(cl_uint) * 2 +
-				   sizeof(cl_double) * 7,
+				   sizeof(cl_double) * 9 +
+				   sizeof(cl_uint) * 2,
 				   f);
 	clSetKernelArg(m->cl.kernel, 3, sizeof(cl_mem), &m->cl.img__);
 	return (0);
@@ -97,8 +96,8 @@ int		main(int ac, char **av)
 		.min_re = -2.5, .max_re = 1.0, .min_im = -1.0,
 		.max_im = 1.0,
 		.movex = 0.75, .movey = -0,
-		.frac = "multibrot",
-		.iteration = 1000
+		.frac = "julia",
+		.iteration = 200
 	};
 	init_opencl(&mlx);
 //	init_color_set(&mlx, &f, cset);
