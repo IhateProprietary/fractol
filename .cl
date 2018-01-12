@@ -8,9 +8,9 @@ typedef struct
 	double	max_re;
 	double	min_im;
 	double	max_im;
-	double	zoom;
 	double	movex;
 	double	movey;
+	double	zoom;
 }	fract_t;
 
 typedef struct
@@ -36,7 +36,7 @@ __kernel void julia(fract_t f,
 	uint		n;
 
 	g.x = get_global_id(0);
-	c.re = f.min_re + g.x * fact.re + f.movex;
+	c.re = (f.min_re + g.x * fact.re) / f.zoom + f.movex;
 	c.im = fact.im;
 	for (n = 0; n < f.iteration; n++)
 	{
@@ -47,7 +47,7 @@ __kernel void julia(fract_t f,
 		c.im = 2.0 * c.re * c.im + f.y_im;
 		c.re = r2 - i2 + f.x_re;
 	}
-	*(img_ptr + (g.x + g.y * 1920)) = n * n;
+	*(img_ptr + (g.x + g.y * 1920)) = n * 0x00111111;
 }
 
 __kernel void mandelbrot(fract_t f,
@@ -61,7 +61,7 @@ __kernel void mandelbrot(fract_t f,
 	uint		n;
 
 	g.x = get_global_id(0);
-	fact.re = f.min_re + g.x * fact.re + f.movex;
+	fact.re = (f.min_re + g.x * fact.re) / f.zoom + f.movex;
 	c.re = fact.re;
 	c.im = fact.im;
 	for (n = 0; n < f.iteration; n++)
@@ -73,7 +73,7 @@ __kernel void mandelbrot(fract_t f,
 		c.im = 2.0 * c.re * c.im + fact.im;
 		c.re = r2 - i2 + fact.re;
 	}
-	*(img_ptr + (g.x + g.y * 1920)) = n * n;
+	*(img_ptr + (g.x + g.y * 1920)) = n * 0x00111111;
 }
 
 #pragma OPENCL EXTENSION cl_khr_fp64 : enable
@@ -89,19 +89,19 @@ __kernel void multibrot(fract_t f,
 	uint		n;
 
 	g.x = get_global_id(0);
-	fact.re = f.min_re + g.x * fact.re + f.movex;
+	fact.re = (f.min_re + g.x * fact.re) / f.zoom + f.movex;
 	c.re = fact.re;
 	c.im = fact.im;
 	for (n = 0; n < f.iteration; n++)
 	{
-		tmp = atan2(c.im, c.re) * 5.0;
+		tmp = atan2(c.im, c.re) * f.x_re;
 		c.im = c.im * c.im;
 		c.re = c.re * c.re;
 		if ((c.im + c.re) > 4.0)
 			break;
 		tmpi = c.im;
-		c.im = pow((c.re + c.im), (5.0/2.0)) * sin(tmp) + fact.im;
-		c.re = pow((c.re + tmpi), (5.0/2.0)) * cos(tmp) + fact.re;
+		c.im = pow((c.re + c.im), (f.x_re/2.0)) * sin(tmp) + fact.im;
+		c.re = pow((c.re + tmpi), (f.x_re/2.0)) * cos(tmp) + fact.re;
 	}
-	*(img_ptr + (g.x + g.y * 1920)) = n * n;
+	*(img_ptr + (g.x + g.y * 1920)) = n * 0x00111111;
 }

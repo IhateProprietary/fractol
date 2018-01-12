@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:41:19 by jye               #+#    #+#             */
-/*   Updated: 2018/01/09 02:33:44 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/12 05:47:44 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,21 @@
 # define IMAGEHEIGHT 	1080
 # define IMAGEWIDTH		1920
 # define PROGRAM_NAME	"fractol"
+# define FRACTAL_IS_MULTIBROT 0x2
+# define FRACTAL_IS_JULIA	  0x1
+# define FRACTAL_CAN_VARY	  0x4
+
+# define MLX_KEY_ESC	0x35
+# define MLX_KEY_ONE	0x12
+# define MLX_KEY_TWO	0x13
+# define MLX_KEY_THREE	0x14
+# define MLX_KEY_FOUR	0x15
+# define MLX_KEY_STAR	0x43
+# define MLX_KEY_MINUS	0x4e
+# define MLX_KEY_PLUS	0x45
+
+# define MLX_KEY_NFUNC		"\x35\x43\x4e\x45"
+# define MLX_KEY_NFRACTAL	"\x12\x13\x14"
 
 typedef union	u_mlxcolor
 {
@@ -51,11 +66,14 @@ typedef struct	s_fract
 	double		max_re;
 	double		min_im;
 	double		max_im;
-	double		zoom;
 	double		movex;
 	double		movey;
+	double		zoom;
 	char		*frac;
-	int			randomness;
+	double		x;
+	double		y;
+	uint32_t	flags;
+	int			itzoom;
 }				t_fract;
 
 typedef struct	s_cl

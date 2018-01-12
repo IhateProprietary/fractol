@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/03 00:45:00 by jye               #+#    #+#             */
-/*   Updated: 2018/01/09 02:27:22 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/12 06:03:50 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	draw_nfract(const t_mlx *m, const t_fract *f,
 	c.im = fact.im;
 	while (y < n)
 	{
-		c.im = f->max_im - y * fact.im + f->movey;
+		c.im = (f->max_im - y * fact.im) / f->zoom - f->movey;
 		clSetKernelArg(m->cl.kernel, 2, sizeof(cl_uint), &y);
 		clSetKernelArg(m->cl.kernel, 1, sizeof(cl_double) * 2, &c);
 		clEnqueueNDRangeKernel(m->cl.queue, m->cl.kernel, 1, 0, &workdim, 0, 0, NULL, 0);
