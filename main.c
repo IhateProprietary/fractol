@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:48:20 by jye               #+#    #+#             */
-/*   Updated: 2018/01/12 09:18:43 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/13 04:20:26 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ cl_program	cl_get_program(t_cl *cl)
 	program = clCreateProgramWithSource(cl->context, 1,	(const char **)&buf,
 										(size_t *)&zzz,
 										&ret);
-	clBuildProgram(program, 1, &cl->dev_id, 0, 0, 0);
+	clBuildProgram(program, 1, &cl->dev_id,
+				   "-D IMAGEHEIGHT=1080 -D IMAGEWIDTH=1920", 0, 0);
 	clGetProgramBuildInfo(program, cl->dev_id, CL_PROGRAM_BUILD_LOG, zzz, buf, &zzz);
 	dprintf(1, "error here----:\n%s", buf);
 	close(fd);
@@ -57,7 +58,7 @@ int		init_opencl(t_mlx *m)
 	m->cl.context = clCreateContext(clpro, 1, &m->cl.dev_id, NULL, NULL, &ret);
 	if (ret != CL_SUCCESS)
 		return (ret);
-	m->cl.queue = clCreateCommandQueue(m->cl.context, m->cl.dev_id, 0, &ret);
+	m->cl.queue = clCreateCommandQueue(m->cl.context, m->cl.dev_id, CL_QUEUE_PROFILING_ENABLE, &ret);
 	if (ret != CL_SUCCESS)
 		return (ret);
 	m->cl.img__ = clCreateBuffer(m->cl.context,
@@ -79,7 +80,7 @@ int		init_opencl_kernel(t_mlx *m, t_fract *f)
 				   sizeof(cl_double) * 9 +
 				   sizeof(cl_uint) * 2,
 				   f);
-	clSetKernelArg(m->cl.kernel, 3, sizeof(cl_mem), &m->cl.img__);
+	clSetKernelArg(m->cl.kernel, 2, sizeof(cl_mem), &m->cl.img__);
 	return (ret);
 }
 
@@ -138,7 +139,7 @@ int		mlx_keyboard_event(uint64_t event, void *param)
 			.zoom = 1.0,
 		}, (t_fract){
 			.x_re = -1.2, .y_im = 0.160, .flags = 0, .zoom = 1.0,
-			.min_re = -1.75, .max_re = 1.75, .min_im = -1.0, .max_im = 1.0, 
+			.min_re = -2.25, .max_re = 1.25, .min_im = -1.0, .max_im = 1.0, 
 			.movex = 0.00, .movey = 0.0, .frac = "mandelbrot", .iteration = 300,
 		}, (t_fract){
 			.x_re = 5.0, .y_im = 0.160, .flags = FRACTAL_IS_MULTIBROT,
