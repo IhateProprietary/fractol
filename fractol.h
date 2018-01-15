@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:41:19 by jye               #+#    #+#             */
-/*   Updated: 2018/01/12 05:47:44 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/15 04:21:16 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,14 @@
 # define MLX_KEY_STAR	0x43
 # define MLX_KEY_MINUS	0x4e
 # define MLX_KEY_PLUS	0x45
+# define MLX_KEY_W		0xd
+# define MLX_KEY_A		0x0
+# define MLX_KEY_S		0x1
+# define MLX_KEY_D		0x2
+# define MLX_KEY_PUP	0x74
+# define MLX_KEY_PDOWN	0x79
 
-# define MLX_KEY_NFUNC		"\x35\x43\x4e\x45"
+# define MLX_KEY_NFUNC		"\x35\x43\x4e\x45\xd\x1\x2\x74\x79"
 # define MLX_KEY_NFRACTAL	"\x12\x13\x14"
 
 typedef union	u_mlxcolor
@@ -66,14 +72,10 @@ typedef struct	s_fract
 	double		max_re;
 	double		min_im;
 	double		max_im;
-	double		movex;
-	double		movey;
-	double		zoom;
 	char		*frac;
-	double		x;
-	double		y;
+	uint32_t	x;
+	uint32_t	y;
 	uint32_t	flags;
-	int			itzoom;
 }				t_fract;
 
 typedef struct	s_cl
@@ -105,6 +107,7 @@ typedef struct	s_mlx
 int				init_mlx_win(t_mlx *mlx);
 int				init_mlx_img(t_mlx *mlx);
 void			put_pixel(void *img_ptr, int x, int y, int color);
+void			mlx_refresh_image(t_mlx *m, t_fract *f);
 
 /*
 ** fractals / nfunction
@@ -112,13 +115,31 @@ void			put_pixel(void *img_ptr, int x, int y, int color);
 
 void			draw_nfract(const t_mlx *m, const t_fract *f,
 							unsigned int y, unsigned int n);
-int				julia_(const t_fract *f, double r, double i);
-int				mandelbrot_(const t_fract *f, double r, double i);
 
 /*
-** multithread draw fractal routine
+** key event
 */
+int				mlx_pointer_event(uint64_t x, uint64_t y, void *param);
+void			mlx_quit_event(void *param);
+void			mlx_shape_event(void *param);
+void			mlx_zoomopin_event(void *param);
+void			mlx_zoomopout_event(void *param);
+void			mlx_zoomin_event(void *param);
+void			mlx_zoomout_event(void *param);
+void			mlx_chfractal_event(t_fract *f, int n);
+void			mlx_right_event(void *param);
+void			mlx_left_event(void *param);
+void			mlx_up_event(void *param);
+void			mlx_down_event(void *param);
+void			cl_reinit_kernel(void *param);
+void			mlx_additer_event(void *param);
+void			mlx_subiter_event(void *param);
+int				mlx_keyboard_event(uint64_t event, void *param);
 
-int				init_draw_routine(t_mlx *mlx, t_fract *f);
-
+/*
+** opencl
+*/
+int				init_opencl_kernel(t_mlx *m, t_fract *f);
+int				init_opencl(t_mlx *m);
+cl_program		cl_get_program(t_cl *cl);
 #endif
