@@ -6,7 +6,7 @@
 /*   By: root <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/14 11:55:45 by root              #+#    #+#             */
-/*   Updated: 2017/09/24 18:17:27 by root             ###   ########.fr       */
+/*   Updated: 2018/01/17 02:20:52 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int					ft_getopt_long(int ac, char **av,
 		nextchar = av[g_optind_++] + 1;
 	else if (*nextchar == 0)
 		return (ft_opt_end(&nextchar));
-	if (ft_strchr(optstr, *nextchar))
+	if (optstr && ft_strchr(optstr, *nextchar))
 		return (ft_getopt_(&nextchar, av, ft_opt_getstruct(*nextchar, lopt_)));
 	if (g_opterr_)
 		ft_dprintf(2, "%s: unrecognized option '%c'\n", pname, *nextchar++);

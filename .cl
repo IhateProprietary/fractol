@@ -14,7 +14,7 @@ typedef struct
 
 __kernel void julia(fract_t f,
 					double2 fact,
-					__constant __read_only uint *cset,
+					__global __read_only uint *cset,
 					__global __write_only uint *img_ptr)
 {
 	double2		c;
@@ -37,14 +37,17 @@ __kernel void julia(fract_t f,
 			z.y = 2.0 * z.x * z.y + f.y_im;
 			z.x = c2.x - c2.y + f.x_re;
 		}
-		*(img_ptr + (g.x + g.y * 1920)) = n * 0x00111111;
+		if (f.csetsize)
+			*(img_ptr + (g.x + g.y * IMAGEWIDTH)) = cset[(n / f.csetsize) % f.csetsize];
+		else
+			*(img_ptr + (g.x + g.y * IMAGEWIDTH)) = n * 0x00080402;
 		c.y -= fact.y;
 	}
 }
 
 __kernel void mandelbrot(fract_t f,
 						 double2 fact,
-						 __constant __read_only uint *cset,
+						 __global __read_only uint *cset,
 						 __global __write_only uint *img_ptr)
 {
 	double2	c;
@@ -67,14 +70,17 @@ __kernel void mandelbrot(fract_t f,
 			z.y = 2.0 * z.x * z.y + c.y;
 			z.x = c2.x - c2.y + c.x;
 		}
-		*(img_ptr + (g.x + g.y * IMAGEWIDTH)) = n * 0x00111111;
+		if (f.csetsize)
+			*(img_ptr + (g.x + g.y * IMAGEWIDTH)) = cset[(n / f.csetsize) % f.csetsize];
+		else
+			*(img_ptr + (g.x + g.y * IMAGEWIDTH)) = n * 0x00080402;
 		c.y -= fact.y;
 	}
 }
 
 __kernel void multibrot(fract_t f,
 						double2 fact,
-						__constant __read_only uint *cset,
+						__global __read_only uint *cset,
 						__global __write_only uint *img_ptr)
 {
 	double2	c;
@@ -98,7 +104,10 @@ __kernel void multibrot(fract_t f,
 			z.y = pow((c2.x + c2.y), (f.x_re/2.0)) * sin(tmp) + c.y;
 			z.x = pow((c2.x + c2.y), (f.x_re/2.0)) * cos(tmp) + c.x;
 		}
-		*(img_ptr + (g.x + g.y * IMAGEWIDTH)) = n * 0x00111111;
+		if (f.csetsize)
+			*(img_ptr + (g.x + g.y * IMAGEWIDTH)) = cset[(n / f.csetsize) % f.csetsize];
+		else
+			*(img_ptr + (g.x + g.y * IMAGEWIDTH)) = n * 0x00080402;
 		c.y -= fact.y;
 	}
 }

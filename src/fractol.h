@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:41:19 by jye               #+#    #+#             */
-/*   Updated: 2018/01/15 04:21:16 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/17 03:54:20 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@
 # else
 #  include "fucknorm2.h"
 # endif
+
+# define MAX_FRACTALS	3
+# define MAX_COLORS		20
 
 # define IMAGEHEIGHT 	1080
 # define IMAGEWIDTH		1920
@@ -52,8 +55,8 @@
 
 typedef union	u_mlxcolor
 {
-	t_color color;
-	int		color__;
+	t_color		color;
+	uint32_t	color__;
 }				t_mlxcolor;
 
 typedef struct	s_complex
@@ -73,6 +76,8 @@ typedef struct	s_fract
 	double		min_im;
 	double		max_im;
 	char		*frac;
+	char		*color;
+	t_mlxcolor	*set;
 	uint32_t	x;
 	uint32_t	y;
 	uint32_t	flags;
@@ -113,8 +118,7 @@ void			mlx_refresh_image(t_mlx *m, t_fract *f);
 ** fractals / nfunction
 */
 
-void			draw_nfract(const t_mlx *m, const t_fract *f,
-							unsigned int y, unsigned int n);
+void			draw_nfract(const t_mlx *m, const t_fract *f);
 
 /*
 ** key event
@@ -126,7 +130,7 @@ void			mlx_zoomopin_event(void *param);
 void			mlx_zoomopout_event(void *param);
 void			mlx_zoomin_event(void *param);
 void			mlx_zoomout_event(void *param);
-void			mlx_chfractal_event(t_fract *f, int n);
+int				mlx_chfractal_event(t_fract *f, int n);
 void			mlx_right_event(void *param);
 void			mlx_left_event(void *param);
 void			mlx_up_event(void *param);
@@ -140,6 +144,6 @@ int				mlx_keyboard_event(uint64_t event, void *param);
 ** opencl
 */
 int				init_opencl_kernel(t_mlx *m, t_fract *f);
-int				init_opencl(t_mlx *m);
+int				init_opencl(t_mlx *m, t_fract *f);
 cl_program		cl_get_program(t_cl *cl);
 #endif

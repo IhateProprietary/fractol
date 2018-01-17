@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/03 00:45:00 by jye               #+#    #+#             */
-/*   Updated: 2018/01/15 03:50:56 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/17 01:17:43 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,14 @@ void	mlx_refresh_image(t_mlx *m, t_fract *f)
 				sizeof(cl_double) * 6 +
 				sizeof(cl_uint) * 2,
 				f);
-	draw_nfract(m, f, 0, IMAGEHEIGHT);
+	draw_nfract(m, f);
 	clEnqueueReadBuffer(m->cl.queue, m->cl.img__, CL_TRUE, 0,
 						sizeof(int) * IMAGEWIDTH * IMAGEHEIGHT, m->img__,
 						0, 0, 0);
 	mlx_put_image_to_window(m->ptr, m->win, m->img, 0, 0);
 }
 
-void	draw_nfract(const t_mlx *m, const t_fract *f,
-					unsigned int y, unsigned int n)
+void	draw_nfract(const t_mlx *m, const t_fract *f)
 {
 	t_complex			fact;
 	const static size_t	workdim = IMAGEWIDTH;

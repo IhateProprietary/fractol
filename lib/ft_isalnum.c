@@ -1,33 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ihate_norm.c                                       :+:      :+:    :+:   */
+/*   ft_isalnum.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/15 04:18:15 by jye               #+#    #+#             */
-/*   Updated: 2018/01/15 04:21:52 by jye              ###   ########.fr       */
+/*   Created: 2016/11/06 16:38:07 by jye               #+#    #+#             */
+/*   Updated: 2017/11/28 01:41:58 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fractol.h"
+#include "libft.h"
 
-void	mlx_additer_event(void *param)
+int		ft_isalnum(int c)
 {
-	t_fract *f;
-
-	f = ((t_fract *)*((void **)param + 1));
-	if (f->iteration > 2000)
-		return ;
-	f->iteration += 10;
-}
-
-void	mlx_subiter_event(void *param)
-{
-	t_fract *f;
-
-	f = ((t_fract *)*((void **)param + 1));
-	if (f->iteration == 10)
-		return ;
-	f->iteration -= 10;
+	return (ft_isdigit(c) || ft_isalpha(c));
 }

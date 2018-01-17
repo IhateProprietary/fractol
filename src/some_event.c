@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 03:37:58 by jye               #+#    #+#             */
-/*   Updated: 2018/01/15 04:25:47 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/17 08:25:08 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	mlx_quit_event(void *param)
 	clReleaseCommandQueue(cl->queue);
 	clReleaseProgram(cl->program);
 	clReleaseMemObject(cl->img__);
+	clReleaseMemObject(cl->cset);
 	clReleaseContext(cl->context);
 	mlx_destroy_image(m->ptr, m->img);
 	mlx_destroy_window(m->ptr, m->win);

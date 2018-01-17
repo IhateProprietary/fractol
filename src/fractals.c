@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 04:02:59 by jye               #+#    #+#             */
-/*   Updated: 2018/01/15 04:47:56 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/17 02:23:27 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,14 @@ const static t_fract	g_nfract[] = {
 	}
 };
 
-void	mlx_chfractal_event(t_fract *f, int n)
+int		mlx_chfractal_event(t_fract *f, int n)
 {
 	int		csetsize;
 
 	csetsize = f->csetsize;
+	if (n >= MAX_FRACTALS)
+		return (1);
 	*f = g_nfract[n];
 	f->csetsize = csetsize;
+	return (0);
 }
