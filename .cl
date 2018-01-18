@@ -21,10 +21,12 @@ __kernel void julia(fract_t f,
 	double2		c2;
 	uint2		g;
 	uint		n;
+	int			cc;
 
 	g.x = get_global_id(0);
 	c.x = (f.min_re + g.x * fact.x);
 	c.y = f.max_im;
+	cc = f.iteration / f.csetsize;
 	for (g.y = 0; g.y < IMAGEHEIGHT; g.y++)
 	{
 		double2	z = {c.x, c.y};
@@ -38,7 +40,7 @@ __kernel void julia(fract_t f,
 			z.x = c2.x - c2.y + f.x_re;
 		}
 		if (f.csetsize)
-			*(img_ptr + (g.x + g.y * IMAGEWIDTH)) = cset[(n / f.csetsize) % f.csetsize];
+			*(img_ptr + (g.x + g.y * IMAGEWIDTH)) = cset[n / cc % f.csetsize];
 		else
 			*(img_ptr + (g.x + g.y * IMAGEWIDTH)) = n * 0x00080402;
 		c.y -= fact.y;
@@ -54,10 +56,12 @@ __kernel void mandelbrot(fract_t f,
 	double2	c2;
 	uint2	g;
 	uint	n;
+	int		cc;
 
 	g.x = get_global_id(0);
 	c.x = (f.min_re + g.x * fact.x);
 	c.y = f.max_im;
+	cc = f.iteration / f.csetsize;
 	for (g.y = 0; g.y < IMAGEHEIGHT; g.y++)
 	{
 		double2 z = {c.x, c.y};
@@ -71,7 +75,7 @@ __kernel void mandelbrot(fract_t f,
 			z.x = c2.x - c2.y + c.x;
 		}
 		if (f.csetsize)
-			*(img_ptr + (g.x + g.y * IMAGEWIDTH)) = cset[(n / f.csetsize) % f.csetsize];
+			*(img_ptr + (g.x + g.y * IMAGEWIDTH)) = cset[n / cc % f.csetsize];
 		else
 			*(img_ptr + (g.x + g.y * IMAGEWIDTH)) = n * 0x00080402;
 		c.y -= fact.y;
@@ -87,10 +91,12 @@ __kernel void multibrot(fract_t f,
 	double2	c2;
 	uint2	g;
 	uint	n;
+	int		cc;
 
 	g.x = get_global_id(0);
 	c.x = (f.min_re + g.x * fact.x);
 	c.y = f.max_im;
+	cc = f.iteration / f.csetsize;
 	for (g.y = 0; g.y < IMAGEHEIGHT; g.y++)
 	{
 		double2 z = {c.x, c.y};
@@ -105,7 +111,7 @@ __kernel void multibrot(fract_t f,
 			z.x = pow((c2.x + c2.y), (f.x_re/2.0)) * cos(tmp) + c.x;
 		}
 		if (f.csetsize)
-			*(img_ptr + (g.x + g.y * IMAGEWIDTH)) = cset[(n / f.csetsize) % f.csetsize];
+			*(img_ptr + (g.x + g.y * IMAGEWIDTH)) = cset[n / cc % f.csetsize];
 		else
 			*(img_ptr + (g.x + g.y * IMAGEWIDTH)) = n * 0x00080402;
 		c.y -= fact.y;
