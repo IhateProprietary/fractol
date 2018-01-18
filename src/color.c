@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/17 08:40:02 by jye               #+#    #+#             */
-/*   Updated: 2018/01/17 08:48:30 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/18 01:42:52 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int		get_color(char **costr)
 
 	s = *costr;
 	if (*s == 0)
-		return (-1);
+		return (0);
 	col.color__ = 0;
 	while (*s && (c = ft_strchr("rgb", *s)))
 	{
@@ -48,14 +48,16 @@ size_t	get_csetsize(char *s)
 	char	*ptr;
 	size_t	cssize;
 
-	cssize = 0;
-	while ((ptr = ft_strchr(s, ';')))
+	cssize = 1;
+	while ((ptr = ft_strchr(s + 1, ';')))
 	{
-		s = ptr + 1;
-		cssize += 1;
 		if (ptr == 0)
 			break ;
+		s = ptr;
+		cssize += 1;
 	}
+	if (s[1] == 0)
+		cssize -= 1;
 	return (cssize);
 }
 

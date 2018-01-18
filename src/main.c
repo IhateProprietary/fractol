@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:48:20 by jye               #+#    #+#             */
-/*   Updated: 2018/01/17 08:46:27 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/18 01:28:08 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,10 @@ int		option_parse(int ac, char **av, t_fract *f)
 		{0, 0, 0, 0}
 	};
 	int						ret;
+	char					*s;
 
-	f->color = 0;
 	f->frac = 0;
+	s = 0;
 	while ((ret = ft_getopt_long(ac, av, NULL, long_opt)) != -1)
 	{
 		if (ret == 'f')
@@ -64,12 +65,13 @@ int		option_parse(int ac, char **av, t_fract *f)
 				return (1);
 		}
 		else if (ret == 'c')
-			f->color = g_optarg_;
+			s = g_optarg_;
 		else if (ret == '?')
 			return (1);
 	}
 	if (f->frac == 0)
 		mlx_chfractal_event(f, 1);
+	f->color = s;
 	return (0);
 }
 
