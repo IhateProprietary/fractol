@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:48:20 by jye               #+#    #+#             */
-/*   Updated: 2018/01/17 06:26:57 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/17 08:46:27 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int		option_parse(int ac, char **av, t_fract *f)
 	int						ret;
 
 	f->color = 0;
+	f->frac = 0;
 	while ((ret = ft_getopt_long(ac, av, NULL, long_opt)) != -1)
 	{
 		if (ret == 'f')
@@ -63,76 +64,12 @@ int		option_parse(int ac, char **av, t_fract *f)
 				return (1);
 		}
 		else if (ret == 'c')
-		{
 			f->color = g_optarg_;
-		}
 		else if (ret == '?')
 			return (1);
 	}
-	return (0);
-}
-
-int		get_color(char **costr)
-{
-	char		*c;
-	char		*s;
-	t_mlxcolor	col;
-
-	s = *costr;
-	if (*s == 0)
-		return (-1);
-	while (*s && (c = strchr("rgb", *s)))
-	{
-		if (*++s == 0)
-			break ;
-		if (*c == 'r')
-			col.color.r = atoi(s);
-		else if (*c == 'g')
-			col.color.g = atoi(s);
-		else if (*c == 'b')
-			col.color.b = atoi(s);
-		while (*s >= 0x30 && *s <= 0x39)
-			s++;
-	}
-	if (*s != ';' && *s != 0)
-		return (-1);
-	*costr = s + 1;
-	return (col.color__);
-}
-
-int		parse_color(t_fract *f)
-{
-	char		*s;
-	char		*ptr;
-	t_mlxcolor	*set;
-	size_t		cssize;
-	int			ret;
-
-	if ((s = f->color) == 0 || *s == 0)
-		return (0);
-	cssize = 0;
-	while ((ptr = strchr(s, ';')))
-	{
-		s = ptr + 1;
-		cssize += 1;
-		if (ptr == 0)
-			break ;	
-	}
-	f->csetsize = cssize;
-	if ((set = (t_mlxcolor *)malloc(sizeof(t_mlxcolor) * cssize)) == 0)
-		return (1);
-	cssize = 0;
-	s = f->color;
-	while (cssize < f->csetsize)
-	{
-		if ((ret = get_color(&s)) == -1)
-		{
-			free(set);
-			return (1);
-		}	
-		set[cssize++].color__ = ret;
-	}
-	f->set = set;
+	if (f->frac == 0)
+		mlx_chfractal_event(f, 1);
 	return (0);
 }
 
@@ -146,13 +83,12 @@ int		main(int ac, char **av)
 		ft_dprintf(2, "fractol: good grief, why did I use mlx.\n");
 		return (1);
 	}
-	f.csetsize = 0;
-	mlx_chfractal_event(&f, 1);
 	if (option_parse(ac, av, &f))
 		return (1);
 	if (parse_color(&f))
 	{
-		ft_dprintf(2, "fractol: your color broke EVERYTHING, uncool maaaaaan, uncoooooool.\n");
+		ft_dprintf(2, "fractol: your color broke EVERYTHING,"
+				" uncool maaaaaan, uncoooooool.\n");
 		return (1);
 	}
 	if (init_opencl(&mlx, &f) || init_opencl_kernel(&mlx, &f))

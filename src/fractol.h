@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:41:19 by jye               #+#    #+#             */
-/*   Updated: 2018/01/17 03:54:20 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/18 01:02:14 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ void			mlx_refresh_image(t_mlx *m, t_fract *f);
 */
 
 void			draw_nfract(const t_mlx *m, const t_fract *f);
+int				parse_color(t_fract *f);
 
 /*
 ** key event
@@ -143,7 +144,9 @@ int				mlx_keyboard_event(uint64_t event, void *param);
 /*
 ** opencl
 */
+
 int				init_opencl_kernel(t_mlx *m, t_fract *f);
 int				init_opencl(t_mlx *m, t_fract *f);
 cl_program		cl_get_program(t_cl *cl);
+
 #endif

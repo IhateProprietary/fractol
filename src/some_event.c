@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 03:37:58 by jye               #+#    #+#             */
-/*   Updated: 2018/01/17 08:25:08 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/17 08:43:28 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,10 @@ void	mlx_quit_event(void *param)
 {
 	t_mlx	*m;
 	t_cl	*cl;
+	t_fract *f;
 
 	m = (t_mlx *)*((void **)param);
+	f = (t_fract *)*((void **)param + 1);
 	cl = &m->cl;
 	clReleaseKernel(cl->kernel);
 	clReleaseCommandQueue(cl->queue);
@@ -63,6 +65,7 @@ void	mlx_quit_event(void *param)
 	clReleaseContext(cl->context);
 	mlx_destroy_image(m->ptr, m->img);
 	mlx_destroy_window(m->ptr, m->win);
+	free(f->set);
 	exit(0);
 }
 

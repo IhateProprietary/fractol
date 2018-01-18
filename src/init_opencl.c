@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 03:31:01 by jye               #+#    #+#             */
-/*   Updated: 2018/01/17 05:38:08 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/17 08:35:12 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 #define BUFFER_SIZE 4096
 
-cl_program	cl_get_program(t_cl *cl)
+cl_program		cl_get_program(t_cl *cl)
 {
 	int			fd;
 	char		*buf;
@@ -47,7 +47,20 @@ cl_program	cl_get_program(t_cl *cl)
 	return (program);
 }
 
-int			init_opencl(t_mlx *m, t_fract *f)
+static cl_mem	cl_create_cset_buffer(t_mlx *m, t_fract *f)
+{
+	int		ret;
+
+	if (f->csetsize == 0)
+		return (clCreateBuffer(m->cl.context, CL_MEM_READ_ONLY,
+						1, 0, &ret));
+	else
+		return (clCreateBuffer(m->cl.context,
+						CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+						sizeof(t_mlxcolor) * f->csetsize, f->set, &ret));
+}
+
+int				init_opencl(t_mlx *m, t_fract *f)
 {
 	cl_int					ret;
 	cl_context_properties	fucknorm[3];
@@ -65,13 +78,7 @@ int			init_opencl(t_mlx *m, t_fract *f)
 		return (ret);
 	m->cl.img__ = clCreateBuffer(m->cl.context, CL_MEM_WRITE_ONLY,
 							sizeof(int) * IMAGEWIDTH * IMAGEHEIGHT, 0, &ret);
-	if (f->csetsize == 0)
-		m->cl.cset = clCreateBuffer(m->cl.context, CL_MEM_READ_ONLY,
-							1, 0, &ret);
-	else
-		m->cl.cset = clCreateBuffer(m->cl.context,
-									CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-									sizeof(t_mlxcolor) * f->csetsize, f->set, &ret);
+	m->cl.cset = cl_create_cset_buffer(m, f);
 	if (ret != CL_SUCCESS)
 		return (ret);
 	if ((m->cl.program = cl_get_program(&m->cl)) == 0)
@@ -79,7 +86,7 @@ int			init_opencl(t_mlx *m, t_fract *f)
 	return (0);
 }
 
-int			init_opencl_kernel(t_mlx *m, t_fract *f)
+int				init_opencl_kernel(t_mlx *m, t_fract *f)
 {
 	cl_int		ret;
 
