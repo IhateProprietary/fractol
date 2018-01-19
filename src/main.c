@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:48:20 by jye               #+#    #+#             */
-/*   Updated: 2018/01/18 01:28:08 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/18 04:54:12 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,10 @@ int		option_parse(int ac, char **av, t_fract *f)
 	s = 0;
 	while ((ret = ft_getopt_long(ac, av, NULL, long_opt)) != -1)
 	{
-		if (ret == 'f')
-		{
-			if (parse_fractal(f, g_optarg_))
-				return (1);
-		}
+		if (ret == 'f' && parse_fractal(f, g_optarg_) &&
+			ft_dprintf(2, "fractol: "
+					"ur fractal is wrong and you should feel bad.\n"))
+			return (1);
 		else if (ret == 'c')
 			s = g_optarg_;
 		else if (ret == '?')

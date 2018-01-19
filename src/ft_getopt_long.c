@@ -6,7 +6,7 @@
 /*   By: root <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/14 11:55:45 by root              #+#    #+#             */
-/*   Updated: 2018/01/17 02:20:52 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/18 04:52:13 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #define OPT_ISOPT(opt) ((opt)[0] == '-' && (opt)[1])
 #define OPT_ISLONG(opt) (!ft_strncmp((opt), "--", 2) && (opt)[2] != 0)
 #define OPT_ISEND(opt) (!ft_strcmp((opt), "--"))
+
+#define T1 ft_getopt_(&nextchar, av, ft_opt_getstruct(*nextchar, lopt_), pname)
 
 int			g_optind_;
 char		*g_optarg_;
@@ -68,10 +70,13 @@ static int			ft_opt_end(char **nextchar)
 }
 
 static int			ft_getopt_(char **nextchar, char **av,
-		struct s_options *lopt)
+						struct s_options *lopt, char *pname)
 {
-	if (lopt->has_arg == req_arg && (*nextchar)[1] == 0)
+	if (lopt->has_arg >= req_arg && (*nextchar)[1] == 0)
 		g_optarg_ = av[g_optind_++];
+	if (lopt->has_arg == req_arg && g_optarg_ == NULL)
+		ft_dprintf(2, "%s: '-%c' doesn't allow an argument\n",
+			pname, lopt->val);
 	return (*(*nextchar)++);
 }
 
@@ -98,7 +103,7 @@ int					ft_getopt_long(int ac, char **av,
 	else if (*nextchar == 0)
 		return (ft_opt_end(&nextchar));
 	if (optstr && ft_strchr(optstr, *nextchar))
-		return (ft_getopt_(&nextchar, av, ft_opt_getstruct(*nextchar, lopt_)));
+		return (T1);
 	if (g_opterr_)
 		ft_dprintf(2, "%s: unrecognized option '%c'\n", pname, *nextchar++);
 	return ('?');
