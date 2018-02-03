@@ -6,7 +6,7 @@
 /*   By: jye <jye@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/23 22:51:33 by jye               #+#    #+#             */
-/*   Updated: 2017/09/24 11:28:50 by jye              ###   ########.fr       */
+/*   Updated: 2018/02/03 01:40:38 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 static int	ft_getopt_long_long_no_arg(struct s_options *lopt, char *pname)
 {
-	if (g_optarg_)
+	if (optarg_)
 	{
-		if (g_opterr_)
+		if (opterr_)
 			ft_dprintf(2, "%s: '--%s' doesn't allow an argument\n",
 					pname, lopt->s);
 		return ('?');
@@ -30,11 +30,11 @@ static int	ft_getopt_long_long_no_arg(struct s_options *lopt, char *pname)
 static int	ft_getopt_long_long_req_arg(struct s_options *lopt, char **av,
 										char *pname)
 {
-	if (!g_optarg_)
-		g_optarg_ = av[g_optind_++];
-	if (!g_optarg_)
+	if (!optarg_)
+		optarg_ = av[optind_++];
+	if (!optarg_)
 	{
-		if (g_opterr_)
+		if (opterr_)
 			ft_dprintf(2, "%s: '--%s' options requires an argument\n",
 					pname, lopt->s);
 		return ('?');
@@ -54,7 +54,7 @@ static int	ft_getopt_long_long_opt_arg(struct s_options *lopt, char *pname)
 
 int			ft_getopt_long_long(struct s_options *lopt, char **av, char *pname)
 {
-	g_optind_ += 1;
+	optind_ += 1;
 	if (lopt == NULL)
 		return ('?');
 	else if (lopt->has_arg == no_arg)
@@ -67,7 +67,7 @@ int			ft_getopt_long_long(struct s_options *lopt, char **av, char *pname)
 
 void		ft_getopt_init(char **pname, char **nextchar, char *s)
 {
-	g_optind_ = 1;
+	optind_ = 1;
 	*pname = s;
 	*nextchar = "";
 }

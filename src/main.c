@@ -6,14 +6,14 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:48:20 by jye               #+#    #+#             */
-/*   Updated: 2018/01/18 04:54:12 by jye              ###   ########.fr       */
+/*   Updated: 2018/02/03 09:49:15 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mlx.h"
 #include "fractol.h"
-#include "ft_printf.h"
 #include "ft_getopt_long.h"
+#include "ft_printf.h"
 #include <stddef.h>
 
 int		parse_fractal(t_fract *f, char *arg)
@@ -45,11 +45,12 @@ int		parse_fractal(t_fract *f, char *arg)
 	return (i >= MAX_FRACTALS);
 }
 
-int		option_parse(int ac, char **av, t_fract *f)
+int		option_parse(int ac, char **av, t_mlx *mlx, t_fract *f)
 {
 	static struct s_options long_opt[] = {
 		{.s = "fractal", .has_arg = req_arg, NULL, 'f'},
 		{.s = "color", .has_arg = req_arg, NULL, 'c'},
+		{.s = "run", .has_arg = req_arg, NULL, 'r'},
 		{0, 0, 0, 0}
 	};
 	int						ret;
@@ -59,12 +60,14 @@ int		option_parse(int ac, char **av, t_fract *f)
 	s = 0;
 	while ((ret = ft_getopt_long(ac, av, NULL, long_opt)) != -1)
 	{
-		if (ret == 'f' && parse_fractal(f, g_optarg_) &&
+		if (ret == 'f' && parse_fractal(f, optarg_) &&
 			ft_dprintf(2, "fractol: "
 					"ur fractal is wrong and you should feel bad.\n"))
 			return (1);
 		else if (ret == 'c')
-			s = g_optarg_;
+			s = optarg_;
+		else if (ret == 'r')
+			mlx->frun = !strcmp(optarg_, "gpu") ? GPU_LOAD : CPU_LOAD;
 		else if (ret == '?')
 			return (1);
 	}
@@ -84,7 +87,7 @@ int		main(int ac, char **av)
 		ft_dprintf(2, "fractol: good grief, why did I use mlx.\n");
 		return (1);
 	}
-	if (option_parse(ac, av, &f))
+	if (option_parse(ac, av, &mlx, &f))
 		return (1);
 	if (parse_color(&f))
 	{

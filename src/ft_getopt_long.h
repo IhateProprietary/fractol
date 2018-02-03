@@ -6,12 +6,14 @@
 /*   By: root <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/14 11:56:09 by root              #+#    #+#             */
-/*   Updated: 2017/09/24 02:26:04 by jye              ###   ########.fr       */
+/*   Updated: 2018/02/03 02:23:24 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_GETOPT_LONG_H
 # define FT_GETOPT_LONG_H
+
+# include "libft.h"
 
 enum	e_arg
 {
@@ -27,10 +29,6 @@ struct	s_options
 	int		*f;
 	int		val;
 };
-
-extern int	g_optind_;
-extern char	*g_optarg_;
-extern int	g_opterr_;
 
 int		ft_getopt_long(int ac, char **av,
 						char *optstring, struct s_options *longopt);

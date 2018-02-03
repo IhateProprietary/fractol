@@ -26,7 +26,8 @@ __kernel void julia(fract_t f,
 	g.x = get_global_id(0);
 	c.x = (f.min_re + g.x * fact.x);
 	c.y = f.max_im;
-	cc = f.iteration / f.csetsize;
+	if (f.csetsize)
+		cc = f.iteration / f.csetsize;
 	for (g.y = 0; g.y < IMAGEHEIGHT; g.y++)
 	{
 		double2	z = {c.x, c.y};
@@ -61,7 +62,8 @@ __kernel void mandelbrot(fract_t f,
 	g.x = get_global_id(0);
 	c.x = (f.min_re + g.x * fact.x);
 	c.y = f.max_im;
-	cc = f.iteration / f.csetsize;
+	if (f.csetsize)
+		cc = f.iteration / f.csetsize;
 	for (g.y = 0; g.y < IMAGEHEIGHT; g.y++)
 	{
 		double2 z = {c.x, c.y};
@@ -96,7 +98,8 @@ __kernel void multibrot(fract_t f,
 	g.x = get_global_id(0);
 	c.x = (f.min_re + g.x * fact.x);
 	c.y = f.max_im;
-	cc = f.iteration / f.csetsize;
+	if (f.csetsize)
+		cc = f.iteration / f.csetsize;
 	for (g.y = 0; g.y < IMAGEHEIGHT; g.y++)
 	{
 		double2 z = {c.x, c.y};

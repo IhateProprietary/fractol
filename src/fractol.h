@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:41:19 by jye               #+#    #+#             */
-/*   Updated: 2018/01/26 05:04:00 by jye              ###   ########.fr       */
+/*   Updated: 2018/02/03 09:57:12 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 
 # define MAX_FRACTALS	3
 # define MAX_COLORS		20
+# define N_THREAD		16
 
 # define IMAGEHEIGHT 	1080
 # define IMAGEWIDTH		1920
@@ -78,6 +79,7 @@ typedef struct	s_fract
 	char		*frac;
 	char		*color;
 	t_mlxcolor	*set;
+	int			(*nfract)();
 	uint32_t	x;
 	uint32_t	y;
 	uint32_t	flags;
@@ -97,12 +99,16 @@ typedef struct	s_cl
 
 typedef struct	s_mlx
 {
-	void	*ptr;
-	void	*win;
-	void	*img;
-	void	*img__;
-	cl_int	img_size;
-	t_cl	cl;
+	void		*ptr;
+	void		*win;
+	void		*img;
+	void		*img__;
+	enum		e_run {
+		GPU_LOAD,
+		CPU_LOAD
+	}			frun;
+	cl_int		img_size;
+	t_cl		cl;
 }				t_mlx;
 
 /*
@@ -118,8 +124,14 @@ void			mlx_refresh_image(t_mlx *m, t_fract *f);
 ** fractals / nfunction
 */
 
-void			draw_nfract(const t_mlx *m, const t_fract *f);
+int 			multibrot(t_fract *f, t_complex c);
+int 			julia(t_fract *f, t_complex c);
+int 			mandelbrot(t_fract *f, t_complex c);
+void			draw_gpu(const t_mlx *m, const t_fract *f);
+int				draw_cpu(t_mlx *m, t_fract *f);
+void			draw_nfract(const t_mlx *m, const t_fract *f, int y, int max);
 int				parse_color(t_fract *f);
+void			*draw_routine(void *param);
 
 /*
 ** key event
@@ -150,8 +162,10 @@ int				init_opencl(t_mlx *m, t_fract *f);
 cl_program		cl_get_program(t_cl *cl);
 
 # define N_XD -1.2, 0.160, 300, 0, -1.75, 1.75, -1.0, 1.0, "julia", 0
-# define O_XD 0, 0, 0, FRACTAL_IS_JULIA}, {-1.2, 0.160, 300, 0, -2.25, 1.25
-# define R_XD -1.0, 1.0, "mandelbrot", 0, 0, 0, 0, 0}, {3.0, 0.160, 300, 0
-# define M_XD -1.75, 1.75, -1.0, 1.0, "multibrot", 0, 0, 0, 0
+# define O_XD {-1.2, 0.160, 300, 0, -2.25, 1.25
+# define R_XD 0, julia, 0, 0, FRACTAL_IS_JULIA}, O_XD
+# define M_XD {3.0, 0.160, 300, 0
+# define I_XD -1.0, 1.0, "mandelbrot", 0, 0, mandelbrot, 0, 0, 0}, M_XD
+# define NE_XD -1.75, 1.75, -1.0, 1.0, "multibrot", 0, 0, multibrot, 0, 0
 
 #endif
