@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:41:19 by jye               #+#    #+#             */
-/*   Updated: 2018/01/18 01:02:14 by jye              ###   ########.fr       */
+/*   Updated: 2018/01/26 05:04:00 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,5 +148,10 @@ int				mlx_keyboard_event(uint64_t event, void *param);
 int				init_opencl_kernel(t_mlx *m, t_fract *f);
 int				init_opencl(t_mlx *m, t_fract *f);
 cl_program		cl_get_program(t_cl *cl);
+
+# define N_XD -1.2, 0.160, 300, 0, -1.75, 1.75, -1.0, 1.0, "julia", 0
+# define O_XD 0, 0, 0, FRACTAL_IS_JULIA}, {-1.2, 0.160, 300, 0, -2.25, 1.25
+# define R_XD -1.0, 1.0, "mandelbrot", 0, 0, 0, 0, 0}, {3.0, 0.160, 300, 0
+# define M_XD -1.75, 1.75, -1.0, 1.0, "multibrot", 0, 0, 0, 0
 
 #endif
