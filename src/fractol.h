@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:41:19 by jye               #+#    #+#             */
-/*   Updated: 2018/02/03 09:57:12 by jye              ###   ########.fr       */
+/*   Updated: 2018/02/04 01:50:40 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,8 @@ int				init_mlx_win(t_mlx *mlx);
 int				init_mlx_img(t_mlx *mlx);
 void			put_pixel(void *img_ptr, int x, int y, int color);
 void			mlx_refresh_image(t_mlx *m, t_fract *f);
+uint64_t		hash_string(char *string);
+int				option_parse(int ac, char **av, t_mlx *mlx, t_fract *f);
 
 /*
 ** fractals / nfunction
