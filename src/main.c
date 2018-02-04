@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:48:20 by jye               #+#    #+#             */
-/*   Updated: 2018/02/04 01:54:57 by jye              ###   ########.fr       */
+/*   Updated: 2018/02/04 08:03:44 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int		main(int ac, char **av)
 		mlx.frun = CPU_LOAD;
 	mlx_hook(mlx.win, 6, 0, mlx_pointer_event, (void*[2]){&mlx, &f});
 	mlx_key_hook(mlx.win, mlx_keyboard_event, (void*[2]){&mlx, &f});
+	mlx_mouse_hook(mlx.win, mlx_mousek_hook, (void*[2]){&mlx, &f});
 	mlx_refresh_image(&mlx, &f);
 	mlx_loop(mlx.ptr);
 }

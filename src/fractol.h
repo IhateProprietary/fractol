@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:41:19 by jye               #+#    #+#             */
-/*   Updated: 2018/02/04 01:50:40 by jye              ###   ########.fr       */
+/*   Updated: 2018/02/04 08:05:47 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,9 +126,9 @@ int				option_parse(int ac, char **av, t_mlx *mlx, t_fract *f);
 ** fractals / nfunction
 */
 
-int 			multibrot(t_fract *f, t_complex c);
-int 			julia(t_fract *f, t_complex c);
-int 			mandelbrot(t_fract *f, t_complex c);
+int				multibrot(t_fract *f, t_complex c);
+int				julia(t_fract *f, t_complex c);
+int				mandelbrot(t_fract *f, t_complex c);
 void			draw_gpu(const t_mlx *m, const t_fract *f);
 int				draw_cpu(t_mlx *m, t_fract *f);
 void			draw_nfract(const t_mlx *m, const t_fract *f, int y, int max);
@@ -143,8 +143,6 @@ void			mlx_quit_event(void *param);
 void			mlx_shape_event(void *param);
 void			mlx_zoomopin_event(void *param);
 void			mlx_zoomopout_event(void *param);
-void			mlx_zoomin_event(void *param);
-void			mlx_zoomout_event(void *param);
 int				mlx_chfractal_event(t_fract *f, int n);
 void			mlx_right_event(void *param);
 void			mlx_left_event(void *param);
@@ -154,6 +152,7 @@ void			cl_reinit_kernel(void *param);
 void			mlx_additer_event(void *param);
 void			mlx_subiter_event(void *param);
 int				mlx_keyboard_event(uint64_t event, void *param);
+int				mlx_mousek_hook(int key, int x, int y, void *param);
 
 /*
 ** opencl

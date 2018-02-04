@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 03:28:56 by jye               #+#    #+#             */
-/*   Updated: 2018/01/15 03:29:24 by jye              ###   ########.fr       */
+/*   Updated: 2018/02/04 08:08:10 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ void	mlx_zoomopout_event(void *param)
 	double	ima;
 
 	f = ((t_fract *)*((void **)param + 1));
+	if (f->max_re - f->min_re > 50.0f)
+		return ;
 	reb = f->min_re + f->x * ((f->max_re - f->min_re) / (IMAGEWIDTH));
 	imb = f->max_im - f->y * ((f->max_im - f->min_im) / (IMAGEHEIGHT));
 	f->min_re *= ZOOM_VALUE;

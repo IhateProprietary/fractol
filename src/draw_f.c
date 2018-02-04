@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/03 00:45:00 by jye               #+#    #+#             */
-/*   Updated: 2018/02/03 09:56:42 by jye              ###   ########.fr       */
+/*   Updated: 2018/02/04 06:44:46 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ void	mlx_refresh_image(t_mlx *m, t_fract *f)
 	if (m->frun == GPU_LOAD)
 	{
 		clSetKernelArg(m->cl.kernel, 0,
-					   sizeof(cl_double) * 6 +
-					   sizeof(cl_uint) * 2,
-					   f);
+					sizeof(cl_double) * 6 +
+					sizeof(cl_uint) * 2,
+					f);
 		draw_gpu(m, f);
 		clEnqueueReadBuffer(m->cl.queue, m->cl.img__, CL_TRUE, 0,
-							sizeof(int) * IMAGEWIDTH * IMAGEHEIGHT, m->img__,
-							0, 0, 0);
+					sizeof(int) * IMAGEWIDTH * IMAGEHEIGHT, m->img__,
+					0, 0, 0);
 	}
 	else
 		draw_cpu(m, f);
@@ -93,7 +93,6 @@ void	draw_nfract(const t_mlx *m, const t_fract *f, int y, int max)
 	t_complex	fact;
 	t_complex	z;
 	int			x;
-	int			n;
 	int			cc;
 
 	fact.re = (f->max_re - f->min_re) / (IMAGEWIDTH);
@@ -107,19 +106,13 @@ void	draw_nfract(const t_mlx *m, const t_fract *f, int y, int max)
 		z.re = f->min_re;
 		while (x < IMAGEWIDTH)
 		{
-			n = f->nfract(f, z);
 			put_pixel(m->img__, x, y, f->csetsize ?
-					  f->set[n / cc % f->csetsize].color__ :
-					  n * 0x00080402);
+				f->set[f->nfract(f, z) / cc % f->csetsize].color__ :
+				f->nfract(f, z) * 0x00080402);
 			z.re += fact.re;
 			x++;
 		}
 		z.im -= fact.im;
 		y++;
 	}
-}
-
-void	put_pixel(void *ptr, int x, int y, int n)
-{
-	*((int *)(ptr + sizeof(int) * (x + y * IMAGEWIDTH))) = n;
 }

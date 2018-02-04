@@ -6,14 +6,14 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/03 08:47:49 by jye               #+#    #+#             */
-/*   Updated: 2018/02/03 09:59:37 by jye              ###   ########.fr       */
+/*   Updated: 2018/02/04 06:30:14 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 #include <math.h>
 
-int mandelbrot(t_fract *f, t_complex c)
+int	mandelbrot(t_fract *f, t_complex c)
 {
 	t_complex	z;
 	t_complex	c2;
@@ -27,7 +27,7 @@ int mandelbrot(t_fract *f, t_complex c)
 		c2.im = z.im * z.im;
 		c2.re = z.re * z.re;
 		if ((c2.im + c2.re) > 4.0)
-			break;
+			break ;
 		z.im = 2.0 * z.re * z.im + c.im;
 		z.re = c2.re - c2.im + c.re;
 		n++;
@@ -35,7 +35,7 @@ int mandelbrot(t_fract *f, t_complex c)
 	return (n);
 }
 
-int julia(t_fract *f, t_complex c)
+int	julia(t_fract *f, t_complex c)
 {
 	t_complex	z;
 	t_complex	c2;
@@ -49,7 +49,7 @@ int julia(t_fract *f, t_complex c)
 		c2.im = z.im * z.im;
 		c2.re = z.re * z.re;
 		if ((c2.im + c2.re) > 4.0)
-			break;
+			break ;
 		z.im = 2.0 * z.re * z.im + f->y_im;
 		z.re = c2.re - c2.im + f->x_re;
 		n++;
@@ -57,7 +57,7 @@ int julia(t_fract *f, t_complex c)
 	return (n);
 }
 
-int multibrot(t_fract *f, t_complex c)
+int	multibrot(t_fract *f, t_complex c)
 {
 	t_complex	z;
 	t_complex	c2;
@@ -73,9 +73,9 @@ int multibrot(t_fract *f, t_complex c)
 		c2.im = z.im * z.im;
 		c2.re = z.re * z.re;
 		if ((c2.im + c2.re) > 4.0)
-			break;
-		z.im = pow((c2.re + c2.im), (f->x_re/2.0)) * sin(tmp) + c.im;
-		z.re = pow((c2.re + c2.im), (f->x_re/2.0)) * cos(tmp) + c.re;
+			break ;
+		z.im = pow((c2.re + c2.im), (f->x_re / 2.0)) * sin(tmp) + c.im;
+		z.re = pow((c2.re + c2.im), (f->x_re / 2.0)) * cos(tmp) + c.re;
 		n++;
 	}
 	return (n);

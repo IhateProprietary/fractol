@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/04 01:47:31 by jye               #+#    #+#             */
-/*   Updated: 2018/02/04 01:52:02 by jye              ###   ########.fr       */
+/*   Updated: 2018/02/04 07:06:03 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static int		set_option(t_mlx *m, t_fract *f, int ret)
 	s = 0;
 	if (ret == 'f' && parse_fractal(f, optarg_) &&
 		ft_dprintf(2, "fractol: "
-				   "ur fractal is wrong and you should feel bad.\n"))
+			"ur fractal is wrong and you should feel bad.\n"))
 		return (1);
 	else if (ret == 'c')
 		s = optarg_;
@@ -70,7 +70,7 @@ static int		set_option(t_mlx *m, t_fract *f, int ret)
 		if (parse_run_option(m, khash))
 		{
 			ft_dprintf(2, "fractol: Duuuuuude I can't"
-					   " run with %s...\n", optarg_);
+				" run with '%s'...\n", optarg_);
 			return (1);
 		}
 	}
@@ -80,7 +80,7 @@ static int		set_option(t_mlx *m, t_fract *f, int ret)
 	return (0);
 }
 
-int		option_parse(int ac, char **av, t_mlx *mlx, t_fract *f)
+int				option_parse(int ac, char **av, t_mlx *mlx, t_fract *f)
 {
 	static struct s_options long_opt[] = {
 		{.s = "fractal", .has_arg = req_arg, NULL, 'f'},
