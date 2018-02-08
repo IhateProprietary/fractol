@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/04 01:47:31 by jye               #+#    #+#             */
-/*   Updated: 2018/02/04 07:06:03 by jye              ###   ########.fr       */
+/*   Updated: 2018/02/08 03:43:46 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int		set_option(t_mlx *m, t_fract *f, int ret)
 	uint64_t	khash;
 	char		*s;
 
-	s = 0;
+	s = f->color;
 	if (ret == 'f' && parse_fractal(f, optarg_) &&
 		ft_dprintf(2, "fractol: "
 			"ur fractal is wrong and you should feel bad.\n"))
@@ -91,6 +91,7 @@ int				option_parse(int ac, char **av, t_mlx *mlx, t_fract *f)
 	int						ret;
 
 	f->frac = 0;
+	f->color = 0;
 	mlx->frun = GPU_LOAD;
 	while ((ret = ft_getopt_long(ac, av, NULL, long_opt)) != -1)
 		if (set_option(mlx, f, ret))
