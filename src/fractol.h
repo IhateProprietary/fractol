@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:41:19 by jye               #+#    #+#             */
-/*   Updated: 2018/01/26 05:04:00 by jye              ###   ########.fr       */
+/*   Updated: 2018/04/08 07:30:03 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,6 @@
 
 # include <stdlib.h>
 # include <stddef.h>
-# if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-#  include "fucknorm1.h"
-# else
-#  include "fucknorm2.h"
-# endif
 
 # define MAX_FRACTALS	3
 # define MAX_COLORS		20
@@ -52,6 +47,14 @@
 
 # define MLX_KEY_NFUNC		"\x35\x43\x4e\x45\xd\x1\x2\x74\x79"
 # define MLX_KEY_NFRACTAL	"\x12\x13\x14"
+
+typedef struct	s_color
+{
+	unsigned char	b:8;
+	unsigned char	g:8;
+	unsigned char	r:8;
+	unsigned char	pad:8;
+}				t_color;
 
 typedef union	u_mlxcolor
 {
