@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/03 19:43:06 by jye               #+#    #+#             */
-/*   Updated: 2017/12/02 02:49:27 by jye              ###   ########.fr       */
+/*   Updated: 2018/02/03 02:27:09 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@
 
 # define QWORD_LBITS 0x101010101010101L
 # define QWORD_HBITS 0x8080808080808080L
+
+# if defined(FT_GETOPT_LONG_H)
+#  include "ft_getopt.h"
+# endif
 
 # if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 #  define MERGE(x1, sh1, x2, sh2) (((x1) << (sh1)) | ((x2) >> (sh2)))

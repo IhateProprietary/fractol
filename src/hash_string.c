@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fucknorm2.h                                        :+:      :+:    :+:   */
+/*   hash_string.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/12/29 01:43:26 by jye               #+#    #+#             */
-/*   Updated: 2018/01/06 04:37:34 by jye              ###   ########.fr       */
+/*   Created: 2018/02/04 01:20:58 by jye               #+#    #+#             */
+/*   Updated: 2018/02/04 01:42:32 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FUCKNORM2_H
-# define FUCKNORM2_H
+#include "fractol.h"
+#include <stddef.h>
 
-typedef struct	s_color
+uint64_t	hash_string(char *string)
 {
-	unsigned int b:8;
-	unsigned int g:8;
-	unsigned int r:8;
-	unsigned int pad:8;
-}				t_color;
+	uint64_t	khash;
 
-#endif
+	khash = 0;
+	while (*string)
+	{
+		khash *= 281474976710677;
+		khash ^= *string | ((*string << 16) << 16);
+		string++;
+	}
+	return (khash);
+}

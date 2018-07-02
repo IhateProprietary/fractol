@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:41:19 by jye               #+#    #+#             */
-/*   Updated: 2018/04/08 07:30:03 by jye              ###   ########.fr       */
+/*   Updated: 2018/02/04 08:05:47 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,15 @@
 
 # include <stdlib.h>
 # include <stddef.h>
+# if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+#  include "fucknorm1.h"
+# else
+#  include "fucknorm2.h"
+# endif
 
 # define MAX_FRACTALS	3
 # define MAX_COLORS		20
+# define N_THREAD		16
 
 # define IMAGEHEIGHT 	1080
 # define IMAGEWIDTH		1920
@@ -48,14 +54,6 @@
 # define MLX_KEY_NFUNC		"\x35\x43\x4e\x45\xd\x1\x2\x74\x79"
 # define MLX_KEY_NFRACTAL	"\x12\x13\x14"
 
-typedef struct	s_color
-{
-	unsigned char	b:8;
-	unsigned char	g:8;
-	unsigned char	r:8;
-	unsigned char	pad:8;
-}				t_color;
-
 typedef union	u_mlxcolor
 {
 	t_color		color;
@@ -81,6 +79,7 @@ typedef struct	s_fract
 	char		*frac;
 	char		*color;
 	t_mlxcolor	*set;
+	int			(*nfract)();
 	uint32_t	x;
 	uint32_t	y;
 	uint32_t	flags;
@@ -100,12 +99,16 @@ typedef struct	s_cl
 
 typedef struct	s_mlx
 {
-	void	*ptr;
-	void	*win;
-	void	*img;
-	void	*img__;
-	cl_int	img_size;
-	t_cl	cl;
+	void		*ptr;
+	void		*win;
+	void		*img;
+	void		*img__;
+	enum		e_run {
+		GPU_LOAD,
+		CPU_LOAD
+	}			frun;
+	cl_int		img_size;
+	t_cl		cl;
 }				t_mlx;
 
 /*
@@ -116,13 +119,21 @@ int				init_mlx_win(t_mlx *mlx);
 int				init_mlx_img(t_mlx *mlx);
 void			put_pixel(void *img_ptr, int x, int y, int color);
 void			mlx_refresh_image(t_mlx *m, t_fract *f);
+uint64_t		hash_string(char *string);
+int				option_parse(int ac, char **av, t_mlx *mlx, t_fract *f);
 
 /*
 ** fractals / nfunction
 */
 
-void			draw_nfract(const t_mlx *m, const t_fract *f);
+int				multibrot(t_fract *f, t_complex c);
+int				julia(t_fract *f, t_complex c);
+int				mandelbrot(t_fract *f, t_complex c);
+void			draw_gpu(const t_mlx *m, const t_fract *f);
+int				draw_cpu(t_mlx *m, t_fract *f);
+void			draw_nfract(const t_mlx *m, const t_fract *f, int y, int max);
 int				parse_color(t_fract *f);
+void			*draw_routine(void *param);
 
 /*
 ** key event
@@ -132,8 +143,6 @@ void			mlx_quit_event(void *param);
 void			mlx_shape_event(void *param);
 void			mlx_zoomopin_event(void *param);
 void			mlx_zoomopout_event(void *param);
-void			mlx_zoomin_event(void *param);
-void			mlx_zoomout_event(void *param);
 int				mlx_chfractal_event(t_fract *f, int n);
 void			mlx_right_event(void *param);
 void			mlx_left_event(void *param);
@@ -143,6 +152,7 @@ void			cl_reinit_kernel(void *param);
 void			mlx_additer_event(void *param);
 void			mlx_subiter_event(void *param);
 int				mlx_keyboard_event(uint64_t event, void *param);
+int				mlx_mousek_hook(int key, int x, int y, void *param);
 
 /*
 ** opencl
@@ -153,8 +163,10 @@ int				init_opencl(t_mlx *m, t_fract *f);
 cl_program		cl_get_program(t_cl *cl);
 
 # define N_XD -1.2, 0.160, 300, 0, -1.75, 1.75, -1.0, 1.0, "julia", 0
-# define O_XD 0, 0, 0, FRACTAL_IS_JULIA}, {-1.2, 0.160, 300, 0, -2.25, 1.25
-# define R_XD -1.0, 1.0, "mandelbrot", 0, 0, 0, 0, 0}, {3.0, 0.160, 300, 0
-# define M_XD -1.75, 1.75, -1.0, 1.0, "multibrot", 0, 0, 0, 0
+# define O_XD {-1.2, 0.160, 300, 0, -2.25, 1.25
+# define R_XD 0, julia, 0, 0, FRACTAL_IS_JULIA}, O_XD
+# define M_XD {3.0, 0.160, 300, 0
+# define I_XD -1.0, 1.0, "mandelbrot", 0, 0, mandelbrot, 0, 0, 0}, M_XD
+# define NE_XD -1.75, 1.75, -1.0, 1.0, "multibrot", 0, 0, multibrot, 0, 0
 
 #endif

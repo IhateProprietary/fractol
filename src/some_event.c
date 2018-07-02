@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 03:37:58 by jye               #+#    #+#             */
-/*   Updated: 2018/01/17 08:43:28 by jye              ###   ########.fr       */
+/*   Updated: 2018/02/04 02:05:02 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,16 @@ void	mlx_quit_event(void *param)
 
 	m = (t_mlx *)*((void **)param);
 	f = (t_fract *)*((void **)param + 1);
-	cl = &m->cl;
-	clReleaseKernel(cl->kernel);
-	clReleaseCommandQueue(cl->queue);
-	clReleaseProgram(cl->program);
-	clReleaseMemObject(cl->img__);
-	clReleaseMemObject(cl->cset);
-	clReleaseContext(cl->context);
+	if (m->frun == GPU_LOAD)
+	{
+		cl = &m->cl;
+		clReleaseKernel(cl->kernel);
+		clReleaseCommandQueue(cl->queue);
+		clReleaseProgram(cl->program);
+		clReleaseMemObject(cl->img__);
+		clReleaseMemObject(cl->cset);
+		clReleaseContext(cl->context);
+	}
 	mlx_destroy_image(m->ptr, m->img);
 	mlx_destroy_window(m->ptr, m->win);
 	free(f->set);

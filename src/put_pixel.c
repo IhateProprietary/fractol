@@ -1,24 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fucknorm2.h                                        :+:      :+:    :+:   */
+/*   put_pixel.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/12/29 01:43:26 by jye               #+#    #+#             */
-/*   Updated: 2018/01/06 04:37:34 by jye              ###   ########.fr       */
+/*   Created: 2018/02/04 06:31:33 by jye               #+#    #+#             */
+/*   Updated: 2018/02/04 06:31:45 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FUCKNORM2_H
-# define FUCKNORM2_H
+#include "fractol.h"
 
-typedef struct	s_color
+void	put_pixel(void *ptr, int x, int y, int n)
 {
-	unsigned int b:8;
-	unsigned int g:8;
-	unsigned int r:8;
-	unsigned int pad:8;
-}				t_color;
-
-#endif
+	*((int *)(ptr + sizeof(int) * (x + y * IMAGEWIDTH))) = n;
+}

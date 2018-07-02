@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fucknorm2.h                                        :+:      :+:    :+:   */
+/*   some_other_event.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/12/29 01:43:26 by jye               #+#    #+#             */
-/*   Updated: 2018/01/06 04:37:34 by jye              ###   ########.fr       */
+/*   Created: 2018/02/04 07:57:22 by jye               #+#    #+#             */
+/*   Updated: 2018/02/04 08:09:32 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FUCKNORM2_H
-# define FUCKNORM2_H
+#include "fractol.h"
 
-typedef struct	s_color
+int		mlx_mousek_hook(int key, int x, int y, void *param)
 {
-	unsigned int b:8;
-	unsigned int g:8;
-	unsigned int r:8;
-	unsigned int pad:8;
-}				t_color;
-
-#endif
+	(void)x;
+	(void)y;
+	if (key == 7)
+		mlx_zoomopin_event(param);
+	else if (key == 6)
+		mlx_zoomopout_event(param);
+	mlx_refresh_image(*((void **)param), *((void **)param + 1));
+	return (0);
+}
