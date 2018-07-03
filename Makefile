@@ -6,7 +6,7 @@
 #    By: jye <marvin@42.fr>                         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/15 05:30:03 by jye               #+#    #+#              #
-#    Updated: 2018/02/04 08:01:58 by jye              ###   ########.fr        #
+#    Updated: 2018/07/03 15:25:12 by jye              ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -45,7 +45,7 @@ lib/libft.a:
 
 $(OBJ_PATH)/%.o : $(SRC_PATH)/%.c
 	@mkdir -p $(OBJ_PATH)
-	$(CC) $(CFLAGS) -c -o $@ $< $(HEADLINK)
+	$(CC) $(CFLAGS) -c -o $@ $< $(HEADLINK) $(DFLAGS)
 
 clean:
 	rm -rf $(OBJ_FILE)

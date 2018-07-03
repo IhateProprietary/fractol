@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 03:37:58 by jye               #+#    #+#             */
-/*   Updated: 2018/02/04 02:05:02 by jye              ###   ########.fr       */
+/*   Updated: 2018/07/03 15:39:57 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ int		mlx_keyboard_event(uint64_t event, void *param)
 	else if ((event_ = strchr(MLX_KEY_NFRACTAL, event)))
 	{
 		mlx_chfractal_event(*((void **)param + 1), event_ - MLX_KEY_NFRACTAL);
-		cl_reinit_kernel(param);
+		if (((t_mlx *)*((void **)param))->frun == GPU_LOAD)
+			cl_reinit_kernel(param);
 	}
 	mlx_refresh_image(*((void **)param), *((void **)param + 1));
 	return (0);

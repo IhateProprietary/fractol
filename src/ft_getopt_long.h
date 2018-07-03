@@ -6,7 +6,7 @@
 /*   By: root <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/14 11:56:09 by root              #+#    #+#             */
-/*   Updated: 2018/02/03 02:23:24 by jye              ###   ########.fr       */
+/*   Updated: 2018/07/03 15:09:52 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 # define FT_GETOPT_LONG_H
 
 # include "libft.h"
+
+extern int optind_;
+extern int opterr_;
+extern char *optarg_;
 
 enum	e_arg
 {

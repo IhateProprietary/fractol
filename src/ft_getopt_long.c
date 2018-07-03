@@ -6,7 +6,7 @@
 /*   By: root <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/14 11:55:45 by root              #+#    #+#             */
-/*   Updated: 2018/02/03 02:13:30 by jye              ###   ########.fr       */
+/*   Updated: 2018/07/03 15:10:32 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@
 #define OPT_ISEND(opt) (!ft_strcmp((opt), "--"))
 
 #define T1 ft_getopt_(&nextchar, av, ft_opt_getstruct(*nextchar, lopt_), pname)
+
+int optind_;
+int opterr_;
+char *optarg_;
 
 struct s_options	*ft_opt_getstruct_long(char *s,
 		struct s_options *longopt,
