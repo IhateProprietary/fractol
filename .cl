@@ -12,13 +12,19 @@ typedef struct
 	double	max_im;
 }	fract_t;
 
+typedef struct
+{
+	double x;
+	double y;
+}	complex_t;
+
 __kernel void julia(fract_t f,
-					double2 fact,
+					complex_t fact,
 					__global __read_only uint *cset,
 					__global __write_only uint *img_ptr)
 {
-	double2		c;
-	double2		c2;
+	complex_t	c;
+	complex_t	c2;
 	uint2		g;
 	uint		n;
 	int			cc;
@@ -30,7 +36,7 @@ __kernel void julia(fract_t f,
 		cc = f.iteration / f.csetsize;
 	for (g.y = 0; g.y < IMAGEHEIGHT; g.y++)
 	{
-		double2	z = {c.x, c.y};
+		complex_t	z = {c.x, c.y};
 		for (n = 0; n < f.iteration; n++)
 		{
 			c2.y = z.y * z.y;
@@ -49,12 +55,12 @@ __kernel void julia(fract_t f,
 }
 
 __kernel void mandelbrot(fract_t f,
-						 double2 fact,
+						 complex_t fact,
 						 __global __read_only uint *cset,
 						 __global __write_only uint *img_ptr)
 {
-	double2	c;
-	double2	c2;
+	complex_t	c;
+	complex_t	c2;
 	uint2	g;
 	uint	n;
 	int		cc;
@@ -66,7 +72,7 @@ __kernel void mandelbrot(fract_t f,
 		cc = f.iteration / f.csetsize;
 	for (g.y = 0; g.y < IMAGEHEIGHT; g.y++)
 	{
-		double2 z = {c.x, c.y};
+		complex_t z = {c.x, c.y};
 		for (n = 0; n < f.iteration; n++)
 		{
 			c2.y = z.y * z.y;
@@ -85,12 +91,12 @@ __kernel void mandelbrot(fract_t f,
 }
 
 __kernel void multibrot(fract_t f,
-						double2 fact,
+						complex_t fact,
 						__global __read_only uint *cset,
 						__global __write_only uint *img_ptr)
 {
-	double2	c;
-	double2	c2;
+	complex_t	c;
+	complex_t	c2;
 	uint2	g;
 	uint	n;
 	int		cc;
@@ -102,7 +108,7 @@ __kernel void multibrot(fract_t f,
 		cc = f.iteration / f.csetsize;
 	for (g.y = 0; g.y < IMAGEHEIGHT; g.y++)
 	{
-		double2 z = {c.x, c.y};
+		complex_t z = {c.x, c.y};
 		for (n = 0; n < f.iteration; n++)
 		{
 			double tmp = atan2(z.y, z.x) * f.x_re;

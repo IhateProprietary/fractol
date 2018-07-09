@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/29 01:48:20 by jye               #+#    #+#             */
-/*   Updated: 2018/02/04 08:03:44 by jye              ###   ########.fr       */
+/*   Updated: 2018/07/03 17:02:19 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "fractol.h"
 #include "ft_printf.h"
 #include <stddef.h>
+#include <stdlib.h>
 #ifdef __APPLE__
 # include <OpenCL/OpenCL.h>
 #endif
@@ -22,7 +23,9 @@ int		init_gpu_run(t_mlx *mlx, t_fract *f)
 {
 	t_cl	*cl;
 
-	if (init_opencl(mlx, f) || init_opencl_kernel(mlx, f))
+	if (init_opencl(mlx, f))
+		exit(1);
+	if (init_opencl_kernel(mlx, f))
 	{
 		ft_dprintf(2, "fractol: somewhere in opencl caught fire.\n");
 		cl = &mlx->cl;

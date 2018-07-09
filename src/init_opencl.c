@@ -6,7 +6,7 @@
 /*   By: jye <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 03:31:01 by jye               #+#    #+#             */
-/*   Updated: 2018/01/17 08:35:12 by jye              ###   ########.fr       */
+/*   Updated: 2018/07/03 17:08:09 by jye              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <OpenCL/OpenCL.h>
 #endif
 
-#define BUFFER_SIZE 4096
+#define BUFFER_SIZE 4096*10
 
 cl_program		cl_get_program(t_cl *cl)
 {
@@ -35,13 +35,20 @@ cl_program		cl_get_program(t_cl *cl)
 	buf[ret] = 0;
 	program = clCreateProgramWithSource(cl->context, 1, (const char **)&buf,
 										(size_t *)&zzz, &ret);
-	clBuildProgram(program, 1, &cl->dev_id,
+	int test;
+	test = clBuildProgram(program, 1, &cl->dev_id,
 				"-D IMAGEHEIGHT=1080 -D IMAGEWIDTH=1920", 0, 0);
-	clGetProgramBuildInfo(program, cl->dev_id,
+	ft_printf("%d\n", test);
+	test = clGetProgramBuildInfo(program, cl->dev_id,
 					CL_PROGRAM_BUILD_LOG, zzz, buf, &zzz);
+	buf[zzz] = 0;
+	ft_printf("%d\n", test);
 	if (*buf != 0)
+	{
 		ft_dprintf(2, "oops CL compiler told me your code suckz.\n"
-				"Here have some error\n%s", buf);
+				   "Here have some error\n%s %zu\n", buf, zzz);
+		return (0);
+	}
 	close(fd);
 	free(buf);
 	return (program);
